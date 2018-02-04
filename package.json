@@ -1,0 +1,16 @@
+{
+  "name": "darksky-collector",
+  "version": "0.1.0",
+  "description": "Collect weather data from Dark Sky API and save to an Influx DB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jonas Birmé <jonas.birme@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "dark-sky": "^1.1.2",
+    "influx": "^5.0.7",
+    "node-cron": "^1.2.1"
+  }
+}
