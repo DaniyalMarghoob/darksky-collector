@@ -4,24 +4,10 @@ const Cron = require('node-cron');
 
 const INFLUX_DB_HOST = process.env.INFLUX_DB_HOST || "influxdb.rydbir.local";
 const DARKSKY_API_KEY = process.env.DARKSKY_API_KEY;
+const CONFIG_FILE = process.env.CONFIG_FILE || './config.json';
+const USE_CRON = true;
 
-const WEATHER_LOCATIONS = [
-  {
-    name: 'solna',
-    latitude: 59.3775869,
-    longitude: 18.010939,
-  },
-  {
-    name: 'löa',
-    latitude: 59.8075448,
-    longitude: 15.1664593,
-  },
-  {
-    name: 'umeå',
-    latitude: 63.8258471,
-    longitude: 20.2630354,
-  }
-];
+const CONFIG = require(CONFIG_FILE);
 
 // Main
 
@@ -41,6 +27,7 @@ const forecastDb = new Influx.InfluxDB({
         pressure: Influx.FieldType.FLOAT,
         windSpeed: Influx.FieldType.FLOAT,
         windBearing: Influx.FieldType.INTEGER,
+        cloudCover: Influx.FieldType.FLOAT,
       },
       tags: [
         'icon', 'location'
@@ -58,6 +45,7 @@ const forecastDb = new Influx.InfluxDB({
         pressure: Influx.FieldType.FLOAT,
         windSpeed: Influx.FieldType.FLOAT,
         windBearing: Influx.FieldType.INTEGER,
+        cloudCover: Influx.FieldType.FLOAT,
       },
       tags: [
         'icon', 'location'
@@ -69,9 +57,13 @@ const forecastDb = new Influx.InfluxDB({
 const darkskyApi = new DarkSky(DARKSKY_API_KEY);
 
 setupDb().then(() => {
-  Cron.schedule('*/5 * * * *', () => {
+  if (USE_CRON) {
+    Cron.schedule('*/5 * * * *', () => {
+      collectForecastData()
+    });
+  } else {
     collectForecastData()
-  });
+  }
 })
 .catch(console.error);
 
@@ -91,7 +83,7 @@ function setupDb() {
 function collectForecastData() {
   const darkskyRequests = [];
 
-  WEATHER_LOCATIONS.forEach(location => {
+  CONFIG.locations.forEach(location => {
     const p = new Promise((resolve, reject) => {
       darkskyApi.latitude(location.latitude).longitude(location.longitude)
       .units('si')
@@ -114,6 +106,7 @@ function collectForecastData() {
               pressure: d.pressure,
               windSpeed: d.windSpeed,
               windBearing: d.windBearing,
+              cloudCover: d.cloudCover,
             },
             tags: { icon: d.icon, location: location.name },
             timestamp: d.time + '000000000',
@@ -131,6 +124,7 @@ function collectForecastData() {
             pressure: c.pressure,
             windSpeed: c.windSpeed,
             windBearing: c.windBearing,
+            cloudCover: c.cloudCover,
           },
           tags: { icon: c.icon, location: location.name },
           timestamp: c.time + '000000000',
@@ -150,7 +144,7 @@ function collectForecastData() {
   })
   Promise.all(darkskyRequests)
   .then(() => {
-    console.log('Processed ' + WEATHER_LOCATIONS.length + ' location(s)');
+    console.log('Processed ' + CONFIG.locations.length + ' location(s)');
   })
   .catch(console.error);
 }

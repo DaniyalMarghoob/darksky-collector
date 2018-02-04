@@ -1,0 +1,18 @@
+{
+  "locations": [
+  {
+    "name": "solna",
+    "latitude": 59.3775869,
+    "longitude": 18.010939
+  },
+  {
+    "name": "löa",
+    "latitude": 59.8075448,
+    "longitude": 15.1664593
+  },
+  {
+    "name": "umeå",
+    "latitude": 63.8258471,
+    "longitude": 20.2630354
+  }]
+}
