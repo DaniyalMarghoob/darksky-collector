@@ -4,7 +4,7 @@ const Cron = require('node-cron');
 
 const INFLUX_DB_HOST = process.env.INFLUX_DB_HOST || "influxdb.rydbir.local";
 const DARKSKY_API_KEY = process.env.DARKSKY_API_KEY;
-const CONFIG_FILE = process.env.CONFIG_FILE || './config.json';
+const CONFIG_FILE = require('./config.json');
 const USE_CRON = true;
 
 const CONFIG = require(CONFIG_FILE);
