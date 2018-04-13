@@ -1,8 +1,8 @@
-FROM node:6
-MAINTAINER Jonas Rydholm Birmé <jonas.birme@gmail.com>
+FROM node:carbon
+# Install app dependencies
+RUN  git clone https://github.com/DaniyalMarghoob/darksky-collector/ && \
+cd darksky-collector
 
-WORKDIR /usr/src/app
-COPY package*.json ./
+WORKDIR darksky-collector
 RUN npm install
-COPY . .
 CMD [ "node", "index.js" ]
