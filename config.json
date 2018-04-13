@@ -1,18 +1,18 @@
 {
   "locations": [
   {
-    "name": "solna",
-    "latitude": 59.3775869,
-    "longitude": 18.010939
+    "name": "tampere",
+    "latitude": 61.4978,
+    "longitude": 23.7610
   },
   {
-    "name": "löa",
-    "latitude": 59.8075448,
-    "longitude": 15.1664593
+    "name": "helsinki",
+    "latitude": 60.1699,
+    "longitude": 24.9384
   },
   {
-    "name": "umeå",
-    "latitude": 63.8258471,
-    "longitude": 20.2630354
+    "name": "oulu",
+    "latitude": 65.0121,
+    "longitude": 25.4651
   }]
 }
